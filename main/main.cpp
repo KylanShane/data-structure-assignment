@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 #include <limits>
+#include "Patient.hpp"
+#include "../Array/PatientArray.hpp"
 
 using namespace std;
 
