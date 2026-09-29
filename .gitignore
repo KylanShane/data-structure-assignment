@@ -2,6 +2,12 @@
 node_modules/
 .pnp
 .pnp.js
+   *.exe
+   *.o
+   *.obj
+   *.out
+   *.dll
+   *.pdb
 
 # Build output
 dist/
