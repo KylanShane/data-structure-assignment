@@ -630,9 +630,9 @@ void healthcareMenu() //healthcare expenditure & service analysis menu
 
 void mainMenu() //main menu
 {
-    cout << "========================================\n";
-    cout << "       FACILITY DATA MANAGEMENT\n";
-    cout << "========================================\n\n";
+    cout << "======================================================\n";
+    cout << "SMART HEALTHCARE & HOSPITAL PATIENT MANAGEMENT SYSTEM\n";
+    cout << "======================================================\n\n";
 
     cout << "1. Datasets\n";
     cout << "2. Array\n";
@@ -642,7 +642,7 @@ void mainMenu() //main menu
     cout << "6. Searching Experiments\n";
     cout << "7. Exit\n";
 
-    cout << "\n========================================\n";
+    cout << "\n======================================================\n";
     cout << "Enter choice: ";
 }
 
