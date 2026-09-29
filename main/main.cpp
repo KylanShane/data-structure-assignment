@@ -5,6 +5,7 @@
 #include <limits>
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
+#include "../SinglyLinkedList/PatientList.hpp"
 
 using namespace std;
 
@@ -351,11 +352,41 @@ void placeholderMenu( //generic menu with empty buttons, the last option is alwa
     }
 }
 
+void displayPatientArray(const PatientArray& arr, const string& title)
+{
+    clearScreen();
+
+    cout << "========================================\n";
+    cout << "          " << title << "\n";
+    cout << "========================================\n\n";
+
+    if (arr.getSize() == 0)
+    {
+        cout << "No data found.\n";
+    }
+    else
+    {
+        for (int i = 0; i < arr.getSize(); i++)
+        {
+            Patient p = arr.get(i);
+
+            cout << p.patientID << "\t"
+                 << p.age << "\t"
+                 << p.careType << "\t"
+                 << p.lengthOfStay << "\t"
+                 << p.baseCostPerHour << "\t"
+                 << p.visitsPerYear << "\t"
+                 << p.totalCost << endl;
+        }
+    }
+
+    pressEnterToContinue();
+}
 
 void arrayMenu( //array menu
-    const Table& A,
-    const Table& B,
-    const Table& C)
+    const PatientArray& A,
+    const PatientArray& B,
+    const PatientArray& C)
 {
     int choice;
 
@@ -377,11 +408,17 @@ void arrayMenu( //array menu
 
         cin >> choice;
 
-        if (choice >= 1 && choice <= 3)
+        if (choice == 1)
         {
-            cout << "\nFeature under development."; //add choice here for array
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.get();
+            displayPatientArray(A, "FACILITY A - ARRAY");
+        }
+        else if (choice == 2)
+        {
+            displayPatientArray(B, "FACILITY B - ARRAY");
+        }
+        else if (choice == 3)
+        {
+            displayPatientArray(C, "FACILITY C - ARRAY");
         }
         else if (choice == 4)
         {
@@ -402,129 +439,46 @@ void arrayMenu( //array menu
 }
 
 
-
-struct Node //linkedlist
+void displayPatientList(const PatientList& list, const string& title)
 {
-    string* data;   // one row stored as a dynamic array
-    int size;       // number of values in the row
-    Node* next;
+    clearScreen();
 
-    Node(const string* row, int count)
+    cout << "========================================\n";
+    cout << "          " << title << "\n";
+    cout << "========================================\n\n";
+
+    if (list.getSize() == 0)
     {
-        size = count;
-        data = new string[count];
-
-        for (int i = 0; i < count; i++)
-        {
-            data[i] = row[i];
-        }
-
-        next = nullptr;
+        cout << "No data found.\n";
     }
-
-    ~Node()
+    else
     {
-        delete[] data;
-    }
-};
-
-
-class SinglyLinkedList //linkedlist
-{
-private:
-
-    Node* head;
-
-public:
-
-    SinglyLinkedList()
-    {
-        head = nullptr;
-    }
-
-    ~SinglyLinkedList()
-    {
-        clear();
-    }
-
-
-
-    void insert(const string* row, int count) //insert function for the linked list
-    {
-        Node* newNode = new Node(row, count);
-
-        if (head == nullptr)
-        {
-            head = newNode;
-            return;
-        }
-
-        Node* current = head;
-
-        while (current->next != nullptr)
-        {
-            current = current->next;
-        }
-
-        current->next = newNode;
-    }
-
-
-    void display(const string& title) //the display function for the linked list
-    {
-        clearScreen();
-
-        cout << "========================================\n";
-        cout << "          " << title << "\n";
-        cout << "========================================\n\n";
-
-        if (head == nullptr)
-        {
-            cout << "No data found.\n";
-        }
-        else
-        {
-            Node* current = head;
-
-            while (current != nullptr)
-            {
-                for (int i = 0; i < current->size; i++)
-                {
-                    cout << current->data[i] << "\t";
-                }
-
-                cout << endl;
-
-                current = current->next;
-            }
-        }
-
-        pressEnterToContinue();
-    }
-
-
-    void clear() //clear option
-    {
-        Node* current = head;
+        PatientNode* current = list.getHead();
 
         while (current != nullptr)
         {
-            Node* temp = current;
+            Patient p = current->data;
+
+            cout << p.patientID << "\t"
+                 << p.age << "\t"
+                 << p.careType << "\t"
+                 << p.lengthOfStay << "\t"
+                 << p.baseCostPerHour << "\t"
+                 << p.visitsPerYear << "\t"
+                 << p.totalCost << endl;
 
             current = current->next;
-
-            delete temp;
         }
-
-        head = nullptr;
     }
-};
+
+    pressEnterToContinue();
+}
 
 
 void linkedListMenu( //linkedlist menu
-    const Table& A,
-    const Table& B,
-    const Table& C)
+    const PatientList& A,
+    const PatientList& B,
+    const PatientList& C)
 {
     int choice;
 
@@ -546,11 +500,17 @@ void linkedListMenu( //linkedlist menu
 
         cin >> choice;
 
-        if (choice >= 1 && choice <= 3)
+        if (choice == 1)
         {
-            cout << "\nFeature under development."; //add choice here for linked list
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cin.get();
+            displayPatientList(A, "FACILITY A - LINKED LIST");
+        }
+        else if (choice == 2)
+        {
+            displayPatientList(B, "FACILITY B - LINKED LIST");
+        }
+        else if (choice == 3)
+        {
+            displayPatientList(C, "FACILITY C - LINKED LIST");
         }
         else if (choice == 4)
         {
@@ -648,7 +608,22 @@ void mainMenu() //main menu
     cout << "Enter choice: ";
 }
 
+void buildPatientArray(const Table& table, PatientArray& arr)
+{
+    for (int i = 1; i < table.rows; i++)
+    {
+        arr.add(rowToPatient(table.cells[i]));
+    }
+}
 
+
+void buildPatientList(const Table& table, PatientList& list)
+{
+    for (int i = 1; i < table.rows; i++)
+    {
+        list.insertAtEnd(rowToPatient(table.cells[i]));
+    }
+}
 
 int main()
 {
@@ -665,6 +640,22 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
     readCSV(facilityAFile, facilityA);
     readCSV(facilityBFile, facilityB);
     readCSV(facilityCFile, facilityC);
+
+    PatientArray patientArrA;
+    PatientArray patientArrB;
+    PatientArray patientArrC;
+
+    buildPatientArray(facilityA, patientArrA);
+    buildPatientArray(facilityB, patientArrB);
+    buildPatientArray(facilityC, patientArrC);
+
+    PatientList patientListA;
+    PatientList patientListB;
+    PatientList patientListC;
+
+    buildPatientList(facilityA, patientListA);
+    buildPatientList(facilityB, patientListB);
+    buildPatientList(facilityC, patientListC);
 
     const string sortSearchOptions[2] = { "Array", "Singly Linked List" };
 
@@ -692,9 +683,9 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
         else if (choice == 2)
         {
             arrayMenu(
-                facilityA,
-                facilityB,
-                facilityC
+                patientArrA,
+                patientArrB,
+                patientArrC
             );
         }
 
@@ -702,9 +693,9 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
         else if (choice == 3)
         {
             linkedListMenu(
-                facilityA,
-                facilityB,
-                facilityC
+                patientListA,
+                patientListB,
+                patientListC
             );
         }
 
