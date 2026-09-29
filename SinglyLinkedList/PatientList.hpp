@@ -8,11 +8,7 @@ struct PatientNode
     Patient data;
     PatientNode* next;
 
-    PatientNode(Patient p)
-    {
-        data = p;
-        next = nullptr;
-    }
+    PatientNode(const Patient& p) : data(p), next(nullptr) {}
 };
 
 class PatientList
@@ -32,6 +28,9 @@ public:
         size = 0;
     }
 
+    PatientList(const PatientList&) = delete;
+    PatientList& operator=(const PatientList&) = delete;
+
     ~PatientList()
     {
         PatientNode* current = head;
@@ -44,7 +43,7 @@ public:
         }
     }
 
-    void insertAtEnd(Patient p) // adds a patient to the end of the list
+    void insertAtEnd(const Patient& p) // adds a patient to the end of the list
     {
         PatientNode* newNode = new PatientNode(p);
 

@@ -20,12 +20,15 @@ public:
         data = new Patient[capacity];
     }
 
+    PatientArray(const PatientArray&) = delete;
+    PatientArray& operator=(const PatientArray&) = delete;
+
     ~PatientArray()
     {
         delete[] data;
     }
 
-    void add(Patient p) // adds a patient, growing the array if full
+    void add(const Patient& p) // adds a patient, growing the array if full
     {
         if (size == capacity)
         {
@@ -49,6 +52,11 @@ public:
     Patient get(int index) const
     {
         return data[index];
+    }
+
+    void set(int index, const Patient& p)
+    {
+        data[index] = p;
     }
 
     int getSize() const
