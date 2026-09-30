@@ -28,6 +28,8 @@ void pressEnterToContinue() // To pauae the console until the user press enter t
     cin.get();
 }
 
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
+
 
 
 
