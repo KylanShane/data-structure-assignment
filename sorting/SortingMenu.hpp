@@ -1,4 +1,3 @@
-
 #ifndef SORTINGMENU_HPP
 #define SORTINGMENU_HPP
 #include <iostream>

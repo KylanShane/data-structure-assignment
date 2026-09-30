@@ -1,4 +1,3 @@
-
 #ifndef SORTINGCOMMON_HPP
 #define SORTINGCOMMON_HPP
 
