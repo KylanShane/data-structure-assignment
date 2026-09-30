@@ -6,9 +6,9 @@
 #include <string>
 #include <limits>
 
-#include "main/Patient.hpp"
-#include "Array/PatientArray.hpp"
-#include "SinglyLinkedList/PatientList.hpp"
+#include "../main/Patient.hpp"
+#include "../Array/PatientArray.hpp"
+#include "../SinglyLinkedList/PatientList.hpp"
 
 using namespace std;
 
