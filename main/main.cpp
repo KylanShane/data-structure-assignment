@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -6,7 +8,7 @@
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
 #include "../SinglyLinkedList/PatientList.hpp"
-
+#include "../Sorting/SortingMenu.hpp"
 
 
 using namespace std;
@@ -28,8 +30,8 @@ void pressEnterToContinue() // To pauae the console until the user press enter t
     cin.get();
 }
 
-#include "../HealthAnalysis/HealthcareAnalysis.hpp"
 
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
 
 struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
 {
@@ -713,10 +715,9 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
 
         else if (choice == 5)
         {
-            placeholderMenu(
-                "SORTING EXPERIMENTS",
-                sortSearchOptions,
-                2
+            PatientSorting::menu(
+                patientArrA, patientArrB, patientArrC,
+                patientListA, patientListB, patientListC
             );
         }
 
