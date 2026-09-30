@@ -7,8 +7,7 @@
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
 #include "../SinglyLinkedList/PatientList.hpp"
-#include "../Sorting/SortingMenu.hpp"
-
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
 
 using namespace std;
 
@@ -30,7 +29,7 @@ void pressEnterToContinue() // To pauae the console until the user press enter t
 }
 
 
-#include "../HealthAnalysis/HealthcareAnalysis.hpp"
+
 
 struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
 {
@@ -791,9 +790,10 @@ int main()
 
         else if (choice == 5)
         {
-            PatientSorting::menu(
-                patientArrA, patientArrB, patientArrC,
-                patientListA, patientListB, patientListC
+            placeholderMenu(
+                "SORTING EXPERIMENTS",
+                sortSearchOptions,
+                2
             );
         }
 
