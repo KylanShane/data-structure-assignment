@@ -7,6 +7,7 @@
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
 #include "../SinglyLinkedList/PatientList.hpp"
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
 
 using namespace std;
 
@@ -27,8 +28,7 @@ void pressEnterToContinue() // To pauae the console until the user press enter t
     cin.get();
 }
 
-// Include healthcare analysis after the common functions
-#include "../HealthcareAnalysis.hpp"
+
 
 
 struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
