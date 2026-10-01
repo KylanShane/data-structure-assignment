@@ -537,65 +537,6 @@ void linkedListMenu( //linkedlist menu
 }
 
 
-void healthcareMenu() //healthcare expenditure & service analysis menu
-{
-    const string facilities[3] = { "Facility A", "Facility B", "Facility C" };
-
-    int choice;
-
-    while (true)
-    {
-        clearScreen();
-
-        cout << "========================================\n";
-        cout << "  HEALTHCARE EXPENDITURE & SERVICE ANALYSIS\n";
-        cout << "========================================\n\n";
-
-        cout << "1. Array\n";
-        cout << "2. Singly Linked List\n";
-        cout << "3. Back\n";
-
-        cout << "\n========================================\n";
-        cout << "Enter choice: ";
-
-        cin >> choice;
-
-        if (choice == 1)
-        {
-            placeholderMenu(
-                "HEALTHCARE ANALYSIS - ARRAY",
-                facilities,
-                3
-            );
-        }
-        else if (choice == 2)
-        {
-            placeholderMenu(
-                "HEALTHCARE ANALYSIS - SINGLY LINKED LIST",
-                facilities,
-                3
-            );
-        }
-        else if (choice == 3)
-        {
-            return;
-        }
-        else
-        {
-            cout << "\nInvalid choice.";
-
-            cin.ignore(
-                numeric_limits<streamsize>::max(),
-                '\n'
-            );
-
-            cin.get();
-            
-        }
-    }
-}
-
-
 
 void mainMenu() //main menu
 {
@@ -709,7 +650,10 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
 
         else if (choice == 4)
         {
-            healthcareMenu();
+            healthcareMenu(
+            patientArrA, patientArrB, patientArrC,
+            patientListA, patientListB, patientListC
+            );
         }
 
 
