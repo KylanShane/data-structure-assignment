@@ -31,19 +31,19 @@ inline void printMenuTitle(const char* title) {
 // Reusable console-table borders and cells (no built-in containers).
 inline void tableBorder(const int widths[], int count, int style = 1) {
     // 0 = top edge, 1 = row separator, 2 = bottom edge.
-    std::cout << (style == 0 ? u8"\u250c" : style == 2 ? u8"\u2514" : u8"\u251c");
+    std::cout << (style == 0 ? "\u250c" : style == 2 ? "\u2514" : "\u251c");
     for (int i = 0; i < count; ++i) {
-        for (int j = 0; j < widths[i] + 2; ++j) std::cout << u8"\u2500";
+        for (int j = 0; j < widths[i] + 2; ++j) std::cout << "\u2500";
         if (i == count - 1)
-            std::cout << (style == 0 ? u8"\u2510" : style == 2 ? u8"\u2518" : u8"\u2524");
+            std::cout << (style == 0 ? "\u2510" : style == 2 ? "\u2518" : "\u2524");
         else
-            std::cout << (style == 0 ? u8"\u252c" : style == 2 ? u8"\u2534" : u8"\u253c");
+            std::cout << (style == 0 ? "\u252c" : style == 2 ? "\u2534" : "\u253c");
     }
     std::cout << '\n';
 }
 template <typename T>
 inline void tableCell(const T& value, int width) {
-    std::cout << " " << std::left << std::setw(width) << value << u8" \u2502";
+    std::cout << " " << std::left << std::setw(width) << value << " \u2502";
 }
 inline void patientBorder(int style = 1) {
     const int widths[5] = {12, 5, 24, 13, 17};
@@ -51,13 +51,13 @@ inline void patientBorder(int style = 1) {
 }
 inline void printHeader() {
     patientBorder(0);
-    std::cout << u8"\u2502";
+    std::cout << "\u2502";
     tableCell("Patient ID", 12); tableCell("Age", 5); tableCell("Care type", 24);
     tableCell("Duration (hr)", 13); tableCell("Total cost (MYR)", 17);
     std::cout << '\n'; patientBorder();
 }
 inline void printPatient(const Patient& p) {
-    std::cout << u8"\u2502" << std::fixed << std::setprecision(2);
+    std::cout << "\u2502" << std::fixed << std::setprecision(2);
     tableCell(p.patientID, 12); tableCell(p.age, 5); tableCell(p.careType, 24);
     tableCell(p.lengthOfStay, 13); tableCell(p.totalCost, 17);
     std::cout << '\n';
@@ -110,7 +110,7 @@ inline void performanceBorder(int style = 1) {
     tableBorder(widths, 7, style);
 }
 inline void performanceHeader() {
-    performanceBorder(0); std::cout << u8"\u2502";
+    performanceBorder(0); std::cout << "\u2502";
     tableCell("Structure", 12); tableCell("Algorithm", 14); tableCell("Records", 7);
     tableCell("Comparisons", 11); tableCell("Record writes", 13);
     tableCell("Time (us)", 12); tableCell("Est. bytes", 10);
@@ -118,7 +118,7 @@ inline void performanceHeader() {
 }
 inline void performanceRow(const char* name, int algorithm, int n,
                            const SortStats& stats, std::size_t bytes, bool lastRow = false) {
-    std::cout << u8"\u2502" << std::fixed << std::setprecision(3);
+    std::cout << "\u2502" << std::fixed << std::setprecision(3);
     tableCell(name, 12); tableCell(algorithmName(algorithm), 14); tableCell(n, 7);
     tableCell(stats.comparisons, 11); tableCell(stats.writes, 13);
     tableCell(stats.microseconds, 12); tableCell(bytes, 10);
@@ -127,13 +127,13 @@ inline void performanceRow(const char* name, int algorithm, int n,
 inline void complexityAndNotes() {
     const int widths[6] = {12, 14, 9, 12, 10, 10};
     std::cout << "\nTIME COMPLEXITY AND AUXILIARY SPACE\n";
-    tableBorder(widths, 6, 0); std::cout << u8"\u2502";
+    tableBorder(widths, 6, 0); std::cout << "\u2502";
     tableCell("Structure", 12); tableCell("Algorithm", 14); tableCell("Best time", 9);
     tableCell("Average time", 12); tableCell("Worst time", 10); tableCell("Aux. space", 10);
     std::cout << '\n'; tableBorder(widths, 6);
     for (int algorithm = 1; algorithm <= 2; ++algorithm) {
         for (int structure = 1; structure <= 2; ++structure) {
-            std::cout << u8"\u2502"; tableCell(structure == 1 ? "Array" : "Singly list", 12);
+            std::cout << "\u2502"; tableCell(structure == 1 ? "Array" : "Singly list", 12);
             tableCell(algorithmName(algorithm), 14); tableCell("O(n)", 9);
             tableCell("O(n^2)", 12); tableCell("O(n^2)", 10); tableCell("O(1)", 10);
             std::cout << '\n'; tableBorder(widths, 6, algorithm == 2 && structure == 2 ? 2 : 1);
