@@ -4,6 +4,12 @@
 #include <iomanip>
 #include <limits>
 #include <cstdlib>
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#endif
 #include "ArraySorting.hpp"
 #include "SinglyListSorting.hpp"
 namespace PatientSorting {
@@ -22,17 +28,39 @@ inline void printMenuTitle(const char* title) {
               << "========================================\n\n";
 }
 
+// Reusable console-table borders and cells (no built-in containers).
+inline void tableBorder(const int widths[], int count, int style = 1) {
+    // 0 = top edge, 1 = row separator, 2 = bottom edge.
+    std::cout << (style == 0 ? u8"\u250c" : style == 2 ? u8"\u2514" : u8"\u251c");
+    for (int i = 0; i < count; ++i) {
+        for (int j = 0; j < widths[i] + 2; ++j) std::cout << u8"\u2500";
+        if (i == count - 1)
+            std::cout << (style == 0 ? u8"\u2510" : style == 2 ? u8"\u2518" : u8"\u2524");
+        else
+            std::cout << (style == 0 ? u8"\u252c" : style == 2 ? u8"\u2534" : u8"\u253c");
+    }
+    std::cout << '\n';
+}
+template <typename T>
+inline void tableCell(const T& value, int width) {
+    std::cout << " " << std::left << std::setw(width) << value << u8" \u2502";
+}
+inline void patientBorder(int style = 1) {
+    const int widths[5] = {12, 5, 24, 13, 17};
+    tableBorder(widths, 5, style);
+}
 inline void printHeader() {
-    std::cout << std::left << std::setw(16) << "Patient ID"
-              << std::setw(8) << "Age" << std::setw(22) << "Care type"
-              << std::setw(16) << "Duration (hr)" << "Total cost (MYR)\n";
-    std::cout << std::string(80, '-') << '\n';
+    patientBorder(0);
+    std::cout << u8"\u2502";
+    tableCell("Patient ID", 12); tableCell("Age", 5); tableCell("Care type", 24);
+    tableCell("Duration (hr)", 13); tableCell("Total cost (MYR)", 17);
+    std::cout << '\n'; patientBorder();
 }
 inline void printPatient(const Patient& p) {
-    std::cout << std::left << std::setw(16) << p.patientID
-              << std::setw(8) << p.age << std::setw(22) << p.careType
-              << std::setw(16) << p.lengthOfStay
-              << std::fixed << std::setprecision(2) << p.totalCost << '\n';
+    std::cout << u8"\u2502" << std::fixed << std::setprecision(2);
+    tableCell(p.patientID, 12); tableCell(p.age, 5); tableCell(p.careType, 24);
+    tableCell(p.lengthOfStay, 13); tableCell(p.totalCost, 17);
+    std::cout << '\n';
 }
 inline int readChoice(int maximum) {
     int choice;
@@ -77,32 +105,43 @@ inline void copyArray(const PatientArray& source, PatientArray& target) {
 inline void copyList(const PatientList& source, PatientList& target) {
     for (PatientNode* n = source.getHead(); n; n = n->next) target.insertAtEnd(n->data);
 }
-inline void performanceHeader() {
-    std::cout << std::left << std::setw(14) << "Structure" << std::setw(10) << "Records"
-              << std::setw(15) << "Comparisons" << std::setw(15) << "Record writes"
-              << std::setw(16) << "Time (us)" << "Est. bytes\n"
-              << std::string(86, '-') << '\n';
+inline void performanceBorder(int style = 1) {
+    const int widths[7] = {12, 14, 7, 11, 13, 12, 10};
+    tableBorder(widths, 7, style);
 }
-inline void performanceRow(const char* name, int n, const SortStats& stats, std::size_t bytes) {
-    std::cout << std::left << std::setw(14) << name << std::setw(10) << n
-              << std::setw(15) << stats.comparisons << std::setw(15) << stats.writes
-              << std::setw(16) << std::fixed << std::setprecision(3) << stats.microseconds
-              << bytes << '\n';
+inline void performanceHeader() {
+    performanceBorder(0); std::cout << u8"\u2502";
+    tableCell("Structure", 12); tableCell("Algorithm", 14); tableCell("Records", 7);
+    tableCell("Comparisons", 11); tableCell("Record writes", 13);
+    tableCell("Time (us)", 12); tableCell("Est. bytes", 10);
+    std::cout << '\n'; performanceBorder();
+}
+inline void performanceRow(const char* name, int algorithm, int n,
+                           const SortStats& stats, std::size_t bytes, bool lastRow = false) {
+    std::cout << u8"\u2502" << std::fixed << std::setprecision(3);
+    tableCell(name, 12); tableCell(algorithmName(algorithm), 14); tableCell(n, 7);
+    tableCell(stats.comparisons, 11); tableCell(stats.writes, 13);
+    tableCell(stats.microseconds, 12); tableCell(bytes, 10);
+    std::cout << '\n'; performanceBorder(lastRow ? 2 : 1);
 }
 inline void complexityAndNotes() {
-    std::cout << "\n" << std::left << std::setw(14) << "Structure" << std::setw(14) << "Best time"
-              << std::setw(14) << "Average time" << std::setw(14) << "Worst time" << "Aux. space\n"
-              << std::string(70, '-') << '\n';
-    const char* names[2] = {"Array", "Singly list"};
-    for (int i = 0; i < 2; ++i)
-        std::cout << std::setw(14) << names[i] << std::setw(14) << "O(n)"
-                  << std::setw(14) << "O(n^2)" << std::setw(14) << "O(n^2)" << "O(1)\n";
-    // Memory values estimate occupied records only. They exclude unused array
-    // capacity, string heap allocations and allocator overhead. Sorting timing
-    // includes counters, excludes copying/output and varies between runs.
-    // Auxiliary space excludes input and experiment copies; records are assumed
-    // bounded in size. Writes exclude assignments to local temporary records.
-
+    const int widths[6] = {12, 14, 9, 12, 10, 10};
+    std::cout << "\nTIME COMPLEXITY AND AUXILIARY SPACE\n";
+    tableBorder(widths, 6, 0); std::cout << u8"\u2502";
+    tableCell("Structure", 12); tableCell("Algorithm", 14); tableCell("Best time", 9);
+    tableCell("Average time", 12); tableCell("Worst time", 10); tableCell("Aux. space", 10);
+    std::cout << '\n'; tableBorder(widths, 6);
+    for (int algorithm = 1; algorithm <= 2; ++algorithm) {
+        for (int structure = 1; structure <= 2; ++structure) {
+            std::cout << u8"\u2502"; tableCell(structure == 1 ? "Array" : "Singly list", 12);
+            tableCell(algorithmName(algorithm), 14); tableCell("O(n)", 9);
+            tableCell("O(n^2)", 12); tableCell("O(n^2)", 10); tableCell("O(1)", 10);
+            std::cout << '\n'; tableBorder(widths, 6, algorithm == 2 && structure == 2 ? 2 : 1);
+        }
+    }
+    // Estimated occupied record storage excludes unused capacity, string heap
+    // storage and allocator overhead. Times exclude copying/printing. Complexity
+    // assumes bounded-size patient records; auxiliary space excludes the copies.
 }
 inline void sortingFlow(const PatientArray* const arrays[], const PatientList* const lists[]) {
     while (true) {
@@ -128,6 +167,7 @@ inline void sortingFlow(const PatientArray* const arrays[], const PatientList* c
                     sortArray(copy, algorithm, field, order == 1);
                     printHeader();
                     for (int i = 0; i < copy.getSize(); ++i) printPatient(copy.get(i));
+                    patientBorder(2);
                 }
             } else {
                 PatientList copy; copyList(*lists[facility - 1], copy);
@@ -136,6 +176,7 @@ inline void sortingFlow(const PatientArray* const arrays[], const PatientList* c
                     sortList(copy, algorithm, field, order == 1);
                     printHeader();
                     for (PatientNode* n = copy.getHead(); n; n = n->next) printPatient(n->data);
+                    patientBorder(2);
                 }
             }
             pauseResults();
@@ -146,24 +187,29 @@ inline void comparisonFlow(const PatientArray* const arrays[], const PatientList
     while (true) {
         int facility = choose("COMPARISON - SELECT FACILITY", "1. Facility A\n2. Facility B\n3. Facility C\n4. Back\n", 4);
         if (facility == 4) return;
-        int algorithm = choose("COMPARE ALGORITHM", "1. Bubble Sort\n2. Insertion Sort\n3. Back\n", 3);
-        if (algorithm == 3) continue;
         clearSortingScreen(); printMenuTitle("SORTING PERFORMANCE COMPARISON");
-        std::cout << "Facility " << char('A' + facility - 1) << " | " << algorithmName(algorithm) << '\n';
+        std::cout << "Facility " << char('A' + facility - 1) << " | Both sorting algorithms\n";
         if (!arrays[facility - 1]->getSize() || !lists[facility - 1]->getSize()) {
             std::cout << "No data in one or both structures. Check CSV loading.\n";
             pauseResults(); continue;
         }
         for (int field = 1; field <= 3; ++field) {
             for (int order = 1; order <= 2; ++order) {
-                PatientArray a; PatientList l;
-                copyArray(*arrays[facility - 1], a); copyList(*lists[facility - 1], l);
-                SortStats sa = sortArray(a, algorithm, field, order == 1);
-                SortStats sl = sortList(l, algorithm, field, order == 1);
-                std::cout << "\n" << fieldName(field) << " - " << (order == 1 ? "Ascending" : "Descending") << '\n';
+                std::cout << "\n" << fieldName(field) << " - "
+                          << (order == 1 ? "Ascending" : "Descending") << '\n';
                 performanceHeader();
-                performanceRow("Array", a.getSize(), sa, static_cast<std::size_t>(a.getSize()) * sizeof(Patient));
-                performanceRow("Singly list", l.getSize(), sl, static_cast<std::size_t>(l.getSize()) * sizeof(PatientNode));
+                for (int algorithm = 1; algorithm <= 2; ++algorithm) {
+                    // Start each algorithm from the same original record order.
+                    PatientArray a; PatientList l;
+                    copyArray(*arrays[facility - 1], a);
+                    copyList(*lists[facility - 1], l);
+                    SortStats sa = sortArray(a, algorithm, field, order == 1);
+                    SortStats sl = sortList(l, algorithm, field, order == 1);
+                    performanceRow("Array", algorithm, a.getSize(), sa,
+                        static_cast<std::size_t>(a.getSize()) * sizeof(Patient));
+                    performanceRow("Singly list", algorithm, l.getSize(), sl,
+                        static_cast<std::size_t>(l.getSize()) * sizeof(PatientNode), algorithm == 2);
+                }
             }
         }
         complexityAndNotes(); pauseResults();
@@ -171,6 +217,9 @@ inline void comparisonFlow(const PatientArray* const arrays[], const PatientList
 }
 inline void menu(const PatientArray& A, const PatientArray& B, const PatientArray& C,
                  const PatientList& LA, const PatientList& LB, const PatientList& LC) {
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8); // Display solid Unicode table borders on Windows.
+#endif
     const PatientArray* arrays[3] = {&A, &B, &C};
     const PatientList* lists[3] = {&LA, &LB, &LC};
     while (true) {
