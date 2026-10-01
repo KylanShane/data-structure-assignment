@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -33,7 +35,7 @@ void pressEnterToContinue() // To pauae the console until the user press enter t
 }
 
 
-
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
 
 struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
 {
@@ -56,7 +58,6 @@ struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
     Table(const Table&) = delete;            // avoid accidental copying
     Table& operator=(const Table&) = delete;
 
-
     void allocate(int r) // reserve r empty rows
     {
         clear();
@@ -75,7 +76,6 @@ struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
             }
         }
     }
-
 
     void clear() // free all memory
     {
@@ -98,10 +98,7 @@ struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
 };
 
 
-//dataset readers
-void readCSV(
-    const string& filename,
-    Table& table)
+void readCSV(const string& filename, Table& table) //dataset readers
 {
     table.clear();
 
@@ -118,8 +115,7 @@ void readCSV(
     string line;
     int lineCount = 0;
 
-    // first pass: count the rows
-    while (getline(file, line))
+    while (getline(file, line)) // first pass: count the rows
     {
         lineCount++;
     }
@@ -131,8 +127,7 @@ void readCSV(
 
     int r = 0;
 
-    // second pass: fill the rows
-    while (r < lineCount && getline(file, line))
+    while (r < lineCount && getline(file, line)) // second pass: fill the rows
     {
         string value;
         int count = 0;
@@ -162,8 +157,8 @@ void readCSV(
 }
 
 
-//to display the data from the csv
-void displayData(
+
+void displayData( //to display the data from the csv
     const Table& data,
     const string& title)
 {
@@ -194,45 +189,31 @@ void displayData(
 }
 
 
-//to combine the data from the three facilities
-void combineData(
+
+void combineData(  //to combine the data from the three facilities
     const Table& A,
     const Table& B,
     const Table& C,
     Table& combined)
 {
-    combined.allocate(
-        A.rows +
-        B.rows +
-        C.rows
-    );
+    combined.allocate(A.rows + B.rows + C.rows);
 
     int r = 0;
 
-    const Table* sources[3] =
-    {
-        &A,
-        &B,
-        &C
-    };
+    const Table* sources[3] = { &A, &B, &C };
 
     for (int s = 0; s < 3; s++)
     {
         for (int i = 0; i < sources[s]->rows; i++)
         {
-            int count =
-                sources[s]->colCount[i];
+            int count = sources[s]->colCount[i];
 
-            combined.cells[r] =
-                new string[count];
-
-            combined.colCount[r] =
-                count;
+            combined.cells[r] = new string[count];
+            combined.colCount[r] = count;
 
             for (int j = 0; j < count; j++)
             {
-                combined.cells[r][j] =
-                    sources[s]->cells[i][j];
+                combined.cells[r][j] = sources[s]->cells[i][j];
             }
 
             r++;
@@ -241,8 +222,8 @@ void combineData(
 }
 
 
-//array section
-void displayArray(
+
+void displayArray( //array section
     const Table& data,
     const string& title)
 {
@@ -273,8 +254,7 @@ void displayArray(
 }
 
 
-//datasets menu
-void datasetsMenu(
+void datasetsMenu( //datasets menu
     const Table& A,
     const Table& B,
     const Table& C)
@@ -301,24 +281,15 @@ void datasetsMenu(
 
         if (choice == 1)
         {
-            displayData(
-                A,
-                "FACILITY A DATASET"
-            );
+            displayData(A, "FACILITY A DATASET");
         }
         else if (choice == 2)
         {
-            displayData(
-                B,
-                "FACILITY B DATASET"
-            );
+            displayData(B, "FACILITY B DATASET");
         }
         else if (choice == 3)
         {
-            displayData(
-                C,
-                "FACILITY C DATASET"
-            );
+            displayData(C, "FACILITY C DATASET");
         }
         else if (choice == 4)
         {
@@ -339,8 +310,7 @@ void datasetsMenu(
 }
 
 
-//generic menu with empty buttons, the last option is always Back
-void placeholderMenu(
+void placeholderMenu( //generic menu with empty buttons, the last option is always Back
     const string& title,
     const string options[],
     int optionCount)
@@ -358,10 +328,7 @@ void placeholderMenu(
 
         for (int i = 0; i < optionCount; i++)
         {
-            cout << i + 1
-                 << ". "
-                 << options[i]
-                 << "\n";
+            cout << i + 1 << ". " << options[i] << "\n";
         }
 
         cout << backChoice << ". Back\n";
@@ -374,12 +341,7 @@ void placeholderMenu(
         if (choice >= 1 && choice <= optionCount)
         {
             cout << "\nFeature under development.";
-
-            cin.ignore(
-                numeric_limits<streamsize>::max(),
-                '\n'
-            );
-
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
         }
         else if (choice == backChoice)
@@ -400,10 +362,7 @@ void placeholderMenu(
     }
 }
 
-
-void displayPatientArray(
-    const PatientArray& arr,
-    const string& title)
+void displayPatientArray(const PatientArray& arr, const string& title)
 {
     clearScreen();
 
@@ -427,17 +386,14 @@ void displayPatientArray(
                  << p.lengthOfStay << "\t"
                  << p.baseCostPerHour << "\t"
                  << p.visitsPerYear << "\t"
-                 << p.totalCost
-                 << endl;
+                 << p.totalCost << endl;
         }
     }
 
     pressEnterToContinue();
 }
 
-
-//array menu
-void arrayMenu(
+void arrayMenu( //array menu
     const PatientArray& A,
     const PatientArray& B,
     const PatientArray& C)
@@ -464,24 +420,15 @@ void arrayMenu(
 
         if (choice == 1)
         {
-            displayPatientArray(
-                A,
-                "FACILITY A - ARRAY"
-            );
+            displayPatientArray(A, "FACILITY A - ARRAY");
         }
         else if (choice == 2)
         {
-            displayPatientArray(
-                B,
-                "FACILITY B - ARRAY"
-            );
+            displayPatientArray(B, "FACILITY B - ARRAY");
         }
         else if (choice == 3)
         {
-            displayPatientArray(
-                C,
-                "FACILITY C - ARRAY"
-            );
+            displayPatientArray(C, "FACILITY C - ARRAY");
         }
         else if (choice == 4)
         {
@@ -502,9 +449,7 @@ void arrayMenu(
 }
 
 
-void displayPatientList(
-    const PatientList& list,
-    const string& title)
+void displayPatientList(const PatientList& list, const string& title)
 {
     clearScreen();
 
@@ -518,13 +463,11 @@ void displayPatientList(
     }
     else
     {
-        PatientNode* current =
-            list.getHead();
+        PatientNode* current = list.getHead();
 
         while (current != nullptr)
         {
-            Patient p =
-                current->data;
+            Patient p = current->data;
 
             cout << p.patientID << "\t"
                  << p.age << "\t"
@@ -532,11 +475,9 @@ void displayPatientList(
                  << p.lengthOfStay << "\t"
                  << p.baseCostPerHour << "\t"
                  << p.visitsPerYear << "\t"
-                 << p.totalCost
-                 << endl;
+                 << p.totalCost << endl;
 
-            current =
-                current->next;
+            current = current->next;
         }
     }
 
@@ -544,8 +485,7 @@ void displayPatientList(
 }
 
 
-//linkedlist menu
-void linkedListMenu(
+void linkedListMenu( //linkedlist menu
     const PatientList& A,
     const PatientList& B,
     const PatientList& C)
@@ -572,24 +512,15 @@ void linkedListMenu(
 
         if (choice == 1)
         {
-            displayPatientList(
-                A,
-                "FACILITY A - LINKED LIST"
-            );
+            displayPatientList(A, "FACILITY A - LINKED LIST");
         }
         else if (choice == 2)
         {
-            displayPatientList(
-                B,
-                "FACILITY B - LINKED LIST"
-            );
+            displayPatientList(B, "FACILITY B - LINKED LIST");
         }
         else if (choice == 3)
         {
-            displayPatientList(
-                C,
-                "FACILITY C - LINKED LIST"
-            );
+            displayPatientList(C, "FACILITY C - LINKED LIST");
         }
         else if (choice == 4)
         {
@@ -610,8 +541,8 @@ void linkedListMenu(
 }
 
 
-//main menu
-void mainMenu()
+
+void mainMenu() //main menu
 {
     cout << "======================================================\n";
     cout << "SMART HEALTHCARE & HOSPITAL PATIENT MANAGEMENT SYSTEM\n";
@@ -629,113 +560,56 @@ void mainMenu()
     cout << "Enter choice: ";
 }
 
-
-void buildPatientArray(
-    const Table& table,
-    PatientArray& arr)
+void buildPatientArray(const Table& table, PatientArray& arr)
 {
     for (int i = 1; i < table.rows; i++)
     {
-        arr.add(
-            rowToPatient(table.cells[i])
-        );
+        arr.add(rowToPatient(table.cells[i]));
     }
 }
 
 
-void buildPatientList(
-    const Table& table,
-    PatientList& list)
+void buildPatientList(const Table& table, PatientList& list)
 {
     for (int i = 1; i < table.rows; i++)
     {
-        list.insertAtEnd(
-            rowToPatient(table.cells[i])
-        );
+        list.insertAtEnd(rowToPatient(table.cells[i]));
     }
 }
-
 
 int main()
 {
-    string facilityAFile =
-        "../datasets/dataset1 facility_a.csv";
 
-    string facilityBFile =
-        "../datasets/dataset2 facility_b.csv";
-
-    string facilityCFile =
-        "../datasets/dataset3 facility_c.csv";
+string facilityAFile = "../datasets/dataset1 facility_a.csv";
+string facilityBFile = "../datasets/dataset2 facility_b.csv";
+string facilityCFile = "../datasets/dataset3 facility_c.csv";
 
 
     Table facilityA;
     Table facilityB;
     Table facilityC;
 
-
-    readCSV(
-        facilityAFile,
-        facilityA
-    );
-
-    readCSV(
-        facilityBFile,
-        facilityB
-    );
-
-    readCSV(
-        facilityCFile,
-        facilityC
-    );
-
+    readCSV(facilityAFile, facilityA);
+    readCSV(facilityBFile, facilityB);
+    readCSV(facilityCFile, facilityC);
 
     PatientArray patientArrA;
     PatientArray patientArrB;
     PatientArray patientArrC;
 
-
-    buildPatientArray(
-        facilityA,
-        patientArrA
-    );
-
-    buildPatientArray(
-        facilityB,
-        patientArrB
-    );
-
-    buildPatientArray(
-        facilityC,
-        patientArrC
-    );
-
+    buildPatientArray(facilityA, patientArrA);
+    buildPatientArray(facilityB, patientArrB);
+    buildPatientArray(facilityC, patientArrC);
 
     PatientList patientListA;
     PatientList patientListB;
     PatientList patientListC;
 
+    buildPatientList(facilityA, patientListA);
+    buildPatientList(facilityB, patientListB);
+    buildPatientList(facilityC, patientListC);
 
-    buildPatientList(
-        facilityA,
-        patientListA
-    );
-
-    buildPatientList(
-        facilityB,
-        patientListB
-    );
-
-    buildPatientList(
-        facilityC,
-        patientListC
-    );
-
-
-    const string sortSearchOptions[2] =
-    {
-        "Array",
-        "Singly Linked List"
-    };
+    const string sortSearchOptions[2] = { "Array", "Singly Linked List" };
 
 
     int choice; //variable for the menu choice
@@ -747,7 +621,6 @@ int main()
         mainMenu();
 
         cin >> choice;
-
 
         if (choice == 1)
         {
@@ -782,22 +655,17 @@ int main()
         else if (choice == 4)
         {
             healthcareMenu(
-                patientArrA,
-                patientArrB,
-                patientArrC,
-                patientListA,
-                patientListB,
-                patientListC
+            patientArrA, patientArrB, patientArrC,
+            patientListA, patientListB, patientListC
             );
         }
 
 
         else if (choice == 5)
         {
-            placeholderMenu(
-                "SORTING EXPERIMENTS",
-                sortSearchOptions,
-                2
+            PatientSorting::menu(
+                patientArrA, patientArrB, patientArrC,
+                patientListA, patientListB, patientListC
             );
         }
 
@@ -823,8 +691,9 @@ int main()
             break;
         }
 
-        
-        else 
+
+
+        else //exception handling for invalid input
         {
             cout << "\nInvalid choice. Please enter 1-7.";
 
