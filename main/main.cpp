@@ -5,11 +5,15 @@
 #include <sstream>
 #include <string>
 #include <limits>
+
+void clearScreen();
+void pressEnterToContinue();
+
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
 #include "../SinglyLinkedList/PatientList.hpp"
-#include "../Sorting/SortingMenu.hpp"
-
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
+#include "../Searching/SearchingMenu.hpp"
 
 using namespace std;
 
@@ -665,16 +669,16 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
             );
         }
 
-
         else if (choice == 6)
         {
-            placeholderMenu(
-                "SEARCHING EXPERIMENTS",
-                sortSearchOptions,
-                2
-            );
+            SearchingMenu::menu(
+                patientArrA,
+                patientArrB,
+                patientArrC,
+                patientListA,
+                patientListB,
+                patientListC);
         }
-
 
         else if (choice == 7)
         {
