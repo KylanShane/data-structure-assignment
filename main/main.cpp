@@ -14,6 +14,7 @@ void pressEnterToContinue();
 #include "../SinglyLinkedList/PatientList.hpp"
 #include "../HealthAnalysis/HealthcareAnalysis.hpp"
 #include "../Searching/SearchingMenu.hpp"
+#include "../sorting/SortingMenu.hpp"
 
 using namespace std;
 
