@@ -4,10 +4,14 @@
 #include <string>
 #include <limits>
 
+void clearScreen();
+void pressEnterToContinue();
+
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
 #include "../SinglyLinkedList/PatientList.hpp"
 #include "../HealthAnalysis/HealthcareAnalysis.hpp"
+#include "../Searching/SearchingMenu.hpp"
 
 using namespace std;
 
@@ -797,16 +801,16 @@ int main()
             );
         }
 
-
         else if (choice == 6)
         {
-            placeholderMenu(
-                "SEARCHING EXPERIMENTS",
-                sortSearchOptions,
-                2
-            );
+            SearchingMenu::menu(
+                patientArrA,
+                patientArrB,
+                patientArrC,
+                patientListA,
+                patientListB,
+                patientListC);
         }
-
 
         else if (choice == 7)
         {
