@@ -28,6 +28,8 @@ public:
         delete[] data;
     }
 
+
+
     void add(const Patient& p) // adds a patient, growing the array if full
     {
         if (size == capacity)
@@ -54,7 +56,7 @@ public:
         return data[index];
     }
 
-    void set(int index, const Patient& p)
+     void set(int index, const Patient& p)
     {
         data[index] = p;
     }

@@ -1,11 +1,20 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <limits>
+
+void clearScreen();
+void pressEnterToContinue();
+
 #include "Patient.hpp"
 #include "../Array/PatientArray.hpp"
 #include "../SinglyLinkedList/PatientList.hpp"
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
+#include "../Searching/SearchingMenu.hpp"
+#include "../sorting/SortingMenu.hpp"
 
 using namespace std;
 
@@ -26,6 +35,8 @@ void pressEnterToContinue() // To pauae the console until the user press enter t
     cin.get();
 }
 
+
+#include "../HealthAnalysis/HealthcareAnalysis.hpp"
 
 struct Table // replaces vector<vector<string>>, a 2D dynamic array of strings
 {
@@ -531,70 +542,12 @@ void linkedListMenu( //linkedlist menu
 }
 
 
-void healthcareMenu() //healthcare expenditure & service analysis menu
-{
-    const string facilities[3] = { "Facility A", "Facility B", "Facility C" };
-
-    int choice;
-
-    while (true)
-    {
-        clearScreen();
-
-        cout << "========================================\n";
-        cout << "  HEALTHCARE EXPENDITURE & SERVICE ANALYSIS\n";
-        cout << "========================================\n\n";
-
-        cout << "1. Array\n";
-        cout << "2. Singly Linked List\n";
-        cout << "3. Back\n";
-
-        cout << "\n========================================\n";
-        cout << "Enter choice: ";
-
-        cin >> choice;
-
-        if (choice == 1)
-        {
-            placeholderMenu(
-                "HEALTHCARE ANALYSIS - ARRAY",
-                facilities,
-                3
-            );
-        }
-        else if (choice == 2)
-        {
-            placeholderMenu(
-                "HEALTHCARE ANALYSIS - SINGLY LINKED LIST",
-                facilities,
-                3
-            );
-        }
-        else if (choice == 3)
-        {
-            return;
-        }
-        else
-        {
-            cout << "\nInvalid choice.";
-
-            cin.ignore(
-                numeric_limits<streamsize>::max(),
-                '\n'
-            );
-
-            cin.get();
-        }
-    }
-}
-
-
 
 void mainMenu() //main menu
 {
-    cout << "========================================\n";
-    cout << "       FACILITY DATA MANAGEMENT\n";
-    cout << "========================================\n\n";
+    cout << "======================================================\n";
+    cout << "SMART HEALTHCARE & HOSPITAL PATIENT MANAGEMENT SYSTEM\n";
+    cout << "======================================================\n\n";
 
     cout << "1. Datasets\n";
     cout << "2. Array\n";
@@ -604,7 +557,7 @@ void mainMenu() //main menu
     cout << "6. Searching Experiments\n";
     cout << "7. Exit\n";
 
-    cout << "\n========================================\n";
+    cout << "\n======================================================\n";
     cout << "Enter choice: ";
 }
 
@@ -702,29 +655,31 @@ string facilityCFile = "../datasets/dataset3 facility_c.csv";
 
         else if (choice == 4)
         {
-            healthcareMenu();
+            healthcareMenu(
+            patientArrA, patientArrB, patientArrC,
+            patientListA, patientListB, patientListC
+            );
         }
 
 
         else if (choice == 5)
         {
-            placeholderMenu(
-                "SORTING EXPERIMENTS",
-                sortSearchOptions,
-                2
+            PatientSorting::menu(
+                patientArrA, patientArrB, patientArrC,
+                patientListA, patientListB, patientListC
             );
         }
-
 
         else if (choice == 6)
         {
-            placeholderMenu(
-                "SEARCHING EXPERIMENTS",
-                sortSearchOptions,
-                2
-            );
+            SearchingMenu::menu(
+                patientArrA,
+                patientArrB,
+                patientArrC,
+                patientListA,
+                patientListB,
+                patientListC);
         }
-
 
         else if (choice == 7)
         {

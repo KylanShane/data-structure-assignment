@@ -6,7 +6,7 @@ A custom C++ application developed to compare the performance, execution time, a
 
 > **Course:** Data Structures and Algorithms (CT077-3-2-DSTR) — Lab Evaluation & Solution Work  
 > **Institution:** Asia Pacific University of Technology & Innovation (APU)  
-> **Language:** C++11 (Built without STL containers like `std::vector` or `std::list`)
+> **Language:** C++
 
 ---
 
